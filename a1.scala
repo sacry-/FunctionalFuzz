@@ -44,8 +44,8 @@ xs.slice(3, 11)
 object Slicer {
   implicit class FancyList[A](val l: List[A]) extends AnyVal {
     def ~>(i: Int, j: Int, k: Int = 1) = {
-      l.zipWithIndex
-        .slice(normalize(i), normalize(j))
+      l.slice(normalize(i), normalize(j))
+        .zipWithIndex
         .filter(_._2 % k == 0)
         .map(_._1)
     }
