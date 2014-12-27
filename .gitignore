@@ -5,3 +5,6 @@ cabal-dev
 *.chi
 *.chs.h
 .virthualenv
+
+# Mac OSX
+.DS_Store
