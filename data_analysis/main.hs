@@ -3,6 +3,7 @@ import System.Directory (doesFileExist)
 import Control.Applicative
 import Control.Monad(join)
 
+-- example: runhaskell main.hs data/*
 main :: IO ()
 main = do
     filesPassed <- (not . null) <$> getArgs
