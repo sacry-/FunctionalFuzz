@@ -1,22 +1,32 @@
 import System.Environment (getArgs)
 import System.Directory (doesFileExist)
 import Control.Applicative
-
+import Control.Monad(join)
 
 main :: IO ()
 main = do
-    filePassed <- (not . null) <$> getArgs
-    fname <- if filePassed then getPath else error "No filepath passed as arg!"
-    exists <- doesFileExist fname
-    raw <- if exists then readFile fname else error "Filepath does not exist!"
-    print $ countWords raw
-    print $ textWords raw
+    filesPassed <- (not . null) <$> getArgs
+    fnames <- if filesPassed then getArgs else error "No filepaths passed as arg!"
+    rawContents <- mapM rawContent fnames
+    let lineCount = join $ map countWords rawContents
+    let rawWords = map textWords rawContents
+    let allWords = sum rawWords
+    print $ "lineCount: " ++ show lineCount
+    print $ "rawWord count: " ++ show rawWords
+    print $ "totalWords: " ++ show allWords
 
-getPath :: IO String
-getPath = head <$> getArgs 
+rawContent :: String -> IO String
+rawContent fname = do
+    exists <- doesFileExist fname
+    if exists then 
+      readFile fname 
+    else error "Filepath does not exist!"
 
 countWords :: String -> [Int]
 countWords input = map (length . words) (lines input)
 
 textWords :: String -> Int
 textWords input = sum (countWords input)
+
+
+
